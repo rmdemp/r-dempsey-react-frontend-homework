@@ -30,7 +30,7 @@ const App = () => {
                     </div>
                 </div>
 
-                <HotelList hotels={hotels}/>
+                <HotelList hotels={hotels} />
             </div>
         </div>
     )
