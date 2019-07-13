@@ -10,8 +10,8 @@ const HotelFilter = props => {
         Price
         <select name="" className="select" value={value} onChange={(event) => setValue(event.target.value)}>
             <option value="recommended">Recommended</option>
-            <option value="low">Price low-to-high</option>
-            <option value="high">Price high-to-low</option>
+            <option value="ascending">Price low-to-high</option>
+            <option value="descending">Price high-to-low</option>
         </select>
         <button className="button">Reset</button>
     </div>
