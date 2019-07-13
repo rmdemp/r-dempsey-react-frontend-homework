@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const HotelFilter = props => {
-  const [value, setValue] = useState('');
+  const [sortPriceBy, setSortPriceBy] = useState('recommended');
+  const [filterBy, setFilterBy] = useState('');
+
+  useEffect(() => {
+    props.onPriceSortByChange(sortPriceBy);
+    props.onNameFilterChange(filterBy);
+  })
+
+  const handlePriceSortChange = (e) => {
+    setSortPriceBy(e.target.value);
+  }
+
+  const handleNameFilterChange = (e) => {
+    setFilterBy(e.target.value);
+  }
 
   return (
     <div className="filters">
         Hotel name
-        <input type="text" className="input" maxLength={1}/>
+        <input type="text" className="input" onChange={(event) => handleNameFilterChange(event)}/>
         Price
-        <select name="" className="select" value={value} onChange={(event) => setValue(event.target.value)}>
+        <select name="" className="select" onChange={(event) => handlePriceSortChange(event)}>
             <option value="recommended">Recommended</option>
             <option value="ascending">Price low-to-high</option>
             <option value="descending">Price high-to-low</option>
         </select>
-        <button className="button">Reset</button>
+        <button className="button" onClick={(event) => handleReset(event)}>Reset</button>
     </div>
   );
 }
