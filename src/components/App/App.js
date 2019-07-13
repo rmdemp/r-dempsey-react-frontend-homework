@@ -7,6 +7,8 @@ import HotelFilter from '../hotel-filter/hotel-filter.component';
 
 const App = () => {
     const [hotels, setHotels] = useState([]);
+    const [filterBy, setFilterBy] = useState('');
+    const [sortPriceBy, setSortPriceBy] = useState('');
 
     useEffect(() => {
         hotelResultService.get().then(response => {
@@ -18,10 +20,10 @@ const App = () => {
         <div className="app-container">
             <div className="content">
                 <div>
-                    <HotelFilter />
+                    <HotelFilter onNameFilterChange={setFilterBy} onPriceSortByChange={setSortPriceBy}/>
                 </div>
 
-                <HotelList hotels={hotels} />
+                <HotelList hotels={hotels} filterBy={filterBy} sortPriceBy={sortPriceBy}/>
             </div>
         </div>
     )
