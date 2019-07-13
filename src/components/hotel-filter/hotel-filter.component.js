@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const HotelFilter = props => {
-  const [sortPriceBy, setSortPriceBy] = useState('recommended');
+  const [sortPriceBy, setSortPriceBy] = useState('');
   const [filterBy, setFilterBy] = useState('');
 
   useEffect(() => {
