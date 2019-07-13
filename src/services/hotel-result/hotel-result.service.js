@@ -7,11 +7,11 @@ class HotelResultService {
             .then(response => response.data)
             .catch((error) => {
                 if (error.response) {
-                    console.log('error.response.data.message', error.response.data.message);
+                    error.response.data.message;
                 } else if (error.request) {
-                    console.log('error.request', error.request);
+                    error.request;
                 } else {
-                    console.error('Error', error.message);
+                    error.message;
                 }
             })
     }
