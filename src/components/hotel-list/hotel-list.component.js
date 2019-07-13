@@ -3,6 +3,21 @@ import React from 'react';
 import HotelCard from '../hotel-card/hotel-card.component';
 
 const HotelList = props => {
+  const emptyStateContainerStyle = {
+    background: 'white',
+    display: 'grid',
+    borderRadius: '2px',
+    overflow: 'hidden',
+    boxShadow: '0 2px 7px -2px rgba(0, 0, 0, 0.12)',
+  }
+
+  const emptyStateContentStyle = {
+    margin: 'auto',
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: '24px',
+  }
+
   if (props.filterBy) {
     let searchTerm = new RegExp(props.filterBy, 'gi');
     let filteredHotels = [];
@@ -12,6 +27,14 @@ const HotelList = props => {
         filteredHotels.push(hotel);
       }
     })
+
+    if (!filteredHotels.length) {
+      return (
+        <div style={emptyStateContainerStyle}>
+          <p style={emptyStateContentStyle}>There are no hotels that meet your filter criteria.</p>
+        </div>
+      )
+    }
 
     return (
       <div className="hotel-list">
