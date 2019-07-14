@@ -1,33 +1,15 @@
 import React from 'react';
+import './hotel-list.style.scss';
 
 import HotelCard from '../hotel-card/hotel-card.component';
 
 const HotelList = props => {
-  const emptyStateContainerStyle = {
-    background: 'white',
-    display: 'grid',
-    borderRadius: '2px',
-    overflow: 'hidden',
-    boxShadow: '0 2px 7px -2px rgba(0, 0, 0, 0.12)',
-  }
-
-  const emptyStateContentStyle = {
-    margin: 'auto',
-    textAlign: 'center',
-    fontWeight: '500',
-  }
-
-  const errorStateContentStyle = {
-    margin: 'auto',
-    textAlign: 'center',
-  }
-
   if (props.serverError) {
     return (
-      <div style={emptyStateContainerStyle}>
-        <div style={errorStateContentStyle}>
-          <h1 style={{ "fontWeight": "600", "fontSize" : "24px", "paddingBottom" : "10px"}}>Oops! Something went wrong!</h1>
-          <p style={{ "fontWeight" : "300", "fontSize" : "18px"}}>Please refresh your browser and try again.</p>
+      <div className="emptyStateContainerStyle">
+        <div className="errorStateContentStyle">
+          <h1>Oops! Something went wrong!</h1>
+          <p>Please refresh your browser and try again.</p>
         </div>
       </div>
     )
@@ -45,8 +27,8 @@ const HotelList = props => {
 
     if (!filteredHotels.length) {
       return (
-        <div style={emptyStateContainerStyle}>
-          <p style={emptyStateContentStyle}>There are no hotels that meet your filter criteria.</p>
+        <div className="emptyStateContainerStyle">
+          <p className="emptyStateContentStyle">There are no hotels that meet your filter criteria.</p>
         </div>
       )
     }
@@ -77,7 +59,7 @@ const HotelList = props => {
       })
     } else {
       sortedHotels = props.hotels.sort((a, b) => {
-        return a.rewards.miles - b.rewards.miles;
+        return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
       });
     }
 
