@@ -9,11 +9,12 @@ const App = () => {
     const [hotels, setHotels] = useState([]);
     const [filterBy, setFilterBy] = useState('');
     const [sortPriceBy, setSortPriceBy] = useState('');
+    const [error, setError] = useState('');
 
     useEffect(() => {
         hotelResultService.get().then(response => {
-            setHotels(response.results.hotels)
-        })
+            if (response) { setHotels(response.results.hotels); }
+        }).catch(err => setError(err.message));
     }, []);
 
     return (
@@ -23,7 +24,7 @@ const App = () => {
                     <HotelFilter onNameFilterChange={setFilterBy} onPriceSortByChange={setSortPriceBy}/>
                 </div>
 
-                <HotelList hotels={hotels} filterBy={filterBy} sortPriceBy={sortPriceBy}/>
+                <HotelList hotels={hotels} filterBy={filterBy} sortPriceBy={sortPriceBy} serverError={error}/>
             </div>
         </div>
     )

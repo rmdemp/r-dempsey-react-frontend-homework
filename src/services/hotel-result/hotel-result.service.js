@@ -6,13 +6,13 @@ class HotelResultService {
             .get('https://homework-app.rocketmiles.com/fe-homework/rates')
             .then(response => response.data)
             .catch((error) => {
-                if (error.response) {
-                    error.response.data.message;
-                } else if (error.request) {
-                    error.request;
-                } else {
-                    error.message;
-                }
+                let statusCode = error.response.data.status;
+                let errorStatus = error.response.data.error;
+                let message = error.response.data.message;
+
+                console.error(`${message} Server responded with error code: ${statusCode} (${errorStatus}).`);
+
+                return error.response.data;
             })
     }
 }
