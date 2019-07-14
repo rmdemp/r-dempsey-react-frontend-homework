@@ -33,6 +33,36 @@ const HotelList = props => {
       )
     }
 
+    if (props.sortPriceBy) {
+      let sortedHotels = [];
+  
+      if (props.sortPriceBy === 'ascending') {
+        sortedHotels = filteredHotels.sort((a, b) => {
+          return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
+        })
+      } else if (props.sortPriceBy === 'descending') {
+        sortedHotels = filteredHotels.sort((a, b) => {
+          return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
+        })
+      } else {
+        sortedHotels = filteredHotels.sort((a, b) => {
+          return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
+        });
+      }
+  
+      return (
+        <div className="hotel-list">
+          {
+            sortedHotels.map(hotel => {
+              return (
+                <HotelCard hotel={hotel} />
+              )
+            })
+          }
+        </div>
+      )
+    }
+
     return (
       <div className="hotel-list">
         {
