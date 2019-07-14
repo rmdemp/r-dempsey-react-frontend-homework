@@ -49,7 +49,7 @@ const HotelList = props => {
           return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
         });
       }
-  
+
       return (
         <div className="hotel-list">
           {
