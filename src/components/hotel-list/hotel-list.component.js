@@ -15,7 +15,22 @@ const HotelList = props => {
     margin: 'auto',
     textAlign: 'center',
     fontWeight: '500',
-    fontSize: '24px',
+  }
+
+  const errorStateContentStyle = {
+    margin: 'auto',
+    textAlign: 'center',
+  }
+
+  if (props.serverError) {
+    return (
+      <div style={emptyStateContainerStyle}>
+        <div style={errorStateContentStyle}>
+          <h1 style={{ "fontWeight": "600", "fontSize" : "24px", "paddingBottom" : "10px"}}>Oops! Something went wrong!</h1>
+          <p style={{ "fontWeight" : "300", "fontSize" : "18px"}}>Please refresh your browser and try again.</p>
+        </div>
+      </div>
+    )
   }
 
   if (props.filterBy) {
