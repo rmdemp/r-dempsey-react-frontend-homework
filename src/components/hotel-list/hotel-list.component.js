@@ -55,7 +55,7 @@ const HotelList = props => {
           {
             sortedHotels.map(hotel => {
               return (
-                <HotelCard hotel={hotel} />
+                <HotelCard hotel={hotel} key={hotel.id} />
               )
             })
           }
@@ -68,7 +68,7 @@ const HotelList = props => {
         {
           filteredHotels.map(hotel => {
             return (
-              <HotelCard hotel={hotel} />
+              <HotelCard hotel={hotel} key={hotel.id} />
             )
           })
         }
@@ -98,7 +98,7 @@ const HotelList = props => {
         {
           sortedHotels.map(hotel => {
             return (
-              <HotelCard hotel={hotel} />
+              <HotelCard hotel={hotel} key={hotel.id} />
             )
           })
         }
@@ -108,7 +108,7 @@ const HotelList = props => {
 
   const hotels = props.hotels.map(hotel => {
       return (
-        <HotelCard hotel={hotel} />
+        <HotelCard hotel={hotel} key={hotel.id} />
       )
     });
   
