@@ -4,7 +4,7 @@ const HotelCard = props => {
   const hotel = props.hotel;
 
   return (
-    <div className="hotel-card" key={hotel.id}>
+    <div className="hotel-card">
         <div
             className="image"
             style={{ backgroundImage: `url(${hotel.hotelStaticContent.mainImage.url})`}}>
