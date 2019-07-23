@@ -15,6 +15,83 @@ const HotelList = props => {
     )
   }
 
+  if (props.neighborhood) {
+    let hotelsByNeighborhood = props.hotels.filter(el => {return el.hotelStaticContent.neighborhoodName === props.neighborhood});
+
+    if (props.filterBy) {
+      let searchTerm = new RegExp(props.filterBy, 'gi');
+      let filteredHotels = [];
+  
+      hotelsByNeighborhood.forEach(hotel => {
+        if (searchTerm.test(hotel.hotelStaticContent.name)) {
+          filteredHotels.push(hotel);
+        }
+      })
+  
+      if (!filteredHotels.length) {
+        return (
+          <div className="emptyStateContainerStyle">
+            <p className="emptyStateContentStyle">There are no hotels that meet your filter criteria.</p>
+          </div>
+        )
+      }
+  
+      if (props.sortPriceBy) {
+        let sortedHotels = [];
+    
+        if (props.sortPriceBy === 'ascending') {
+          sortedHotels = filteredHotels.sort((a, b) => {
+            return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
+          })
+        } else if (props.sortPriceBy === 'descending') {
+          sortedHotels = filteredHotels.sort((a, b) => {
+            return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
+          })
+        } else {
+          sortedHotels = filteredHotels.sort((a, b) => {
+            return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
+          });
+        }
+  
+        return (
+          <div className="hotel-list">
+            {
+              sortedHotels.map(hotel => {
+                return (
+                  <HotelCard hotel={hotel} key={hotel.id} />
+                )
+              })
+            }
+          </div>
+        )
+      }
+  
+      return (
+        <div className="hotel-list">
+          {
+            filteredHotels.map(hotel => {
+              return (
+                <HotelCard hotel={hotel} key={hotel.id} />
+              )
+            })
+          }
+        </div>
+      )
+    }
+  
+    return (
+      <div className="hotel-list">
+        {
+          hotelsByNeighborhood.map(hotel => {
+            return (
+              <HotelCard hotel={hotel} key={hotel.id} />
+            )
+          })
+        }
+      </div>
+    )
+  }
+
   if (props.filterBy) {
     let searchTerm = new RegExp(props.filterBy, 'gi');
     let filteredHotels = [];
@@ -108,7 +185,7 @@ const HotelList = props => {
 
   if (props.neighborhood) {
     let hotelsByNeighborhood = props.hotels.filter(el => {return el.hotelStaticContent.neighborhoodName === props.neighborhood});
-
+  
     return (
       <div className="hotel-list">
         {
