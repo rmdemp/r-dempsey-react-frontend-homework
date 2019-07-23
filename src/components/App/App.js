@@ -9,6 +9,7 @@ const App = () => {
     const [hotels, setHotels] = useState([]);
     const [filterBy, setFilterBy] = useState('');
     const [sortPriceBy, setSortPriceBy] = useState('');
+    const [neighborhood, setNeighborhood] = useState('');
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -21,10 +22,21 @@ const App = () => {
         <div className="app-container">
             <div className="content">
                 <div>
-                    <HotelFilter hotels={hotels} onNameFilterChange={setFilterBy} onPriceSortByChange={setSortPriceBy}/>
+                    <HotelFilter
+                        hotels={hotels}
+                        onNameFilterChange={setFilterBy}
+                        onPriceSortByChange={setSortPriceBy}
+                        onNeighborhoodChange={setNeighborhood}
+                    />
                 </div>
 
-                <HotelList hotels={hotels} filterBy={filterBy} sortPriceBy={sortPriceBy} serverError={error}/>
+                <HotelList
+                    hotels={hotels}
+                    filterBy={filterBy}
+                    sortPriceBy={sortPriceBy}
+                    neighborhood={neighborhood}
+                    serverError={error}
+                />
             </div>
         </div>
     )
