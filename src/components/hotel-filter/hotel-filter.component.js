@@ -5,6 +5,7 @@ const HotelFilter = props => {
   const [filterBy, setFilterBy] = useState('');
   const inputRef = useRef(null);
   const selectRef = useRef(null);
+  const neighborhoods = {};
 
   useEffect(() => {
     props.onPriceSortByChange(sortPriceBy);
@@ -26,6 +27,18 @@ const HotelFilter = props => {
     setSortPriceBy('recommended');
   }
 
+  const neighborhoodNames = props.hotels.map(hotel => {
+    return hotel.hotelStaticContent.neighborhoodName;
+  });
+
+  neighborhoodNames.forEach(el => {
+    if (!neighborhoods[el]) {
+      neighborhoods[el] = 1;
+    } else {
+      neighborhoods[el]++;
+    }
+  });
+
   return (
     <div className="filters">
         Hotel name
@@ -35,6 +48,16 @@ const HotelFilter = props => {
             <option value="recommended">Recommended</option>
             <option value="ascending">Price low-to-high</option>
             <option value="descending">Price high-to-low</option>
+        </select>
+        Neighborhood
+        <select className="select" onChange={(event) => console.log(event.target.value)}>
+            {
+              Object.entries(neighborhoods).map(([key, value]) => {
+                return (
+                  <option value={key}>{key} ({value})</option>
+                )
+              })
+            }
         </select>
         <button className="button" onClick={() => handleReset()}>Reset</button>
     </div>

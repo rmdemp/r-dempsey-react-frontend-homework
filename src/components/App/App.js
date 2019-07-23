@@ -21,7 +21,7 @@ const App = () => {
         <div className="app-container">
             <div className="content">
                 <div>
-                    <HotelFilter onNameFilterChange={setFilterBy} onPriceSortByChange={setSortPriceBy}/>
+                    <HotelFilter hotels={hotels} onNameFilterChange={setFilterBy} onPriceSortByChange={setSortPriceBy}/>
                 </div>
 
                 <HotelList hotels={hotels} filterBy={filterBy} sortPriceBy={sortPriceBy} serverError={error}/>
