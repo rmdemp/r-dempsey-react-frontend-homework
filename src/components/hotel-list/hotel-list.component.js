@@ -2,7 +2,6 @@ import React from 'react';
 import './hotel-list.style.scss';
 
 import HotelCard from '../hotel-card/hotel-card.component';
-import { removeProperties } from '@babel/types';
 
 const filterByName = (arr, filterCriteria) => {
   const searchTerm = new RegExp(filterCriteria, 'i');
