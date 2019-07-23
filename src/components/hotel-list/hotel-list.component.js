@@ -2,8 +2,8 @@ import React from 'react';
 import './hotel-list.style.scss';
 
 import HotelCard from '../hotel-card/hotel-card.component';
+import { removeProperties } from '@babel/types';
 
-// filter by name
 const filterByName = (arr, filterCriteria) => {
   const searchTerm = new RegExp(filterCriteria, 'i');
   let filteredArray = [];
@@ -17,29 +17,25 @@ const filterByName = (arr, filterCriteria) => {
   return filteredArray;
 }
 
-// sort by price ascending
 const sortByPriceAscending = arr => {
   return arr.sort((a, b) => {
     return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount; 
   })
 }
 
-// sort by price descending
 const sortByPriceDescending = arr => {
   return arr.sort((a, b) => {
     return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
   })
 }
 
-// sort by recommended
 const sortByRecommended = arr => {
   return arr.sort((a, b) => {
     return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
   })
 }
 
-// sort hotels by ascending, descending, or default to recommended
-const sortHotels = (arr, sortCriteria = null) => {
+const sortHotelsByPrice = (arr, sortCriteria = null) => {
   let sortedHotels = [];
     
   if (sortCriteria === 'ascending') {
@@ -53,13 +49,14 @@ const sortHotels = (arr, sortCriteria = null) => {
   return sortedHotels;
 }
 
-// sort by neighborhood
 const sortByNeighborhood = (arr, neighborhood) => {
   return arr.filter(el => { return el.hotelStaticContent.neighborhoodName === neighborhood });
 }
 
 // component definition
 const HotelList = props => {
+  let filteredAndSortedHotels = [];
+
   if (props.serverError) {
     return (
       <div className="emptyStateContainerStyle">
@@ -69,6 +66,44 @@ const HotelList = props => {
         </div>
       </div>
     )
+  }
+
+  if (props.sortPriceBy) {
+    if (props.neighborhood) {
+      if (props.filterBy) {
+        filteredAndSortedHotels = sortHotelsByPrice(filterByName(sortByNeighborhood(props.hotels, props.neighborhood), props.filterBy), props.sortPriceBy);
+      }
+      
+      filteredAndSortedHotels = sortHotelsByPrice(sortByNeighborhood(props.hotels, props.neighborhood), props.sortPriceBy);
+    }
+
+    if (props.filterBy) {
+      filteredAndSortedHotels = sortHotelsByPrice(filterByName(props.hotels, props.filterBy), props.sortPriceBy);
+    }
+
+    filteredAndSortedHotels = sortHotelsByPrice(props.hotels, props.sortPriceBy);
+  }
+
+  if (props.filterBy) {
+    let filteredHotels = filterByName(props.hotels, props.filterBy);
+
+    if (!filteredHotels.length) {
+      return (
+        <div className="emptyStateContainerStyle">
+          <p className="emptyStateContentStyle">There are no hotels that meet your filter criteria.</p>
+        </div>
+      )
+    }
+
+    if (props.neighborhood) {
+      filteredAndSortedHotels = sortByNeighborhood(filteredHotels, props.neighborhood);
+    }
+
+    if (props.sortPriceBy) {
+      filteredAndSortedHotels = sortHotelsByPrice(filteredHotels, props.sortPriceBy);
+    }
+
+    filteredAndSortedHotels = filteredHotels;
   }
 
   if (props.neighborhood) {
@@ -86,137 +121,23 @@ const HotelList = props => {
       }
   
       if (props.sortPriceBy) {
-        let sortedHotels = sortHotels(filteredHotels, props.sortPriceBy);
-    
-        return (
-          <div className="hotel-list">
-            {
-              sortedHotels.map(hotel => {
-                return (
-                  <HotelCard hotel={hotel} key={hotel.id} />
-                )
-              })
-            }
-          </div>
-        )
+        filteredAndSortedHotels = sortHotelsByPrice(filteredHotels, props.sortPriceBy);
       }
   
-      return (
-        <div className="hotel-list">
-          {
-            filteredHotels.map(hotel => {
-              return (
-                <HotelCard hotel={hotel} key={hotel.id} />
-              )
-            })
-          }
-        </div>
-      )
+      filteredAndSortedHotels = filteredHotels;
     }
 
     if (props.sortPriceBy) {
-      let sortedHotels = sortHotels(hotelsByNeighborhood, props.sortPriceBy);
-  
-      return (
-        <div className="hotel-list">
-          {
-            sortedHotels.map(hotel => {
-              return (
-                <HotelCard hotel={hotel} key={hotel.id} />
-              )
-            })
-          }
-        </div>
-      )
-    }
-  
-    return (
-      <div className="hotel-list">
-        {
-          hotelsByNeighborhood.map(hotel => {
-            return (
-              <HotelCard hotel={hotel} key={hotel.id} />
-            )
-          })
-        }
-      </div>
-    )
-  }
-
-  if (props.filterBy) {
-    let filteredHotels = filterByName(props.hotels, props.filterBy);
-
-    if (!filteredHotels.length) {
-      return (
-        <div className="emptyStateContainerStyle">
-          <p className="emptyStateContentStyle">There are no hotels that meet your filter criteria.</p>
-        </div>
-      )
+      filteredAndSortedHotels = sortHotelsByPrice(hotelsByNeighborhood, props.sortPriceBy);
     }
 
-    if (props.sortPriceBy) {
-      let sortedHotels = sortHotels(filteredHotels, props.sortPriceBy);
-  
-      return (
-        <div className="hotel-list">
-          {
-            sortedHotels.map(hotel => {
-              return (
-                <HotelCard hotel={hotel} key={hotel.id} />
-              )
-            })
-          }
-        </div>
-      )
-    }
-
-    return (
-      <div className="hotel-list">
-        {
-          filteredHotels.map(hotel => {
-            return (
-              <HotelCard hotel={hotel} key={hotel.id} />
-            )
-          })
-        }
-      </div>
-    )
+    filteredAndSortedHotels = hotelsByNeighborhood;
   }
 
-  if (props.sortPriceBy) {
-    let hotels = props.hotels;
-    let sortedHotels = sortHotels(hotels, props.sortPriceBy);
+  let hotels;
 
-    return (
-      <div className="hotel-list">
-        {
-          sortedHotels.map(hotel => {
-            return (
-              <HotelCard hotel={hotel} key={hotel.id} />
-            )
-          })
-        }
-      </div>
-    )
-  }
-
-  if (props.neighborhood) {
-    let hotelsByNeighborhood = sortByNeighborhood(props.hotel, props.neighborhood);
-  
-    return (
-      <div className="hotel-list">
-        {
-          hotelsByNeighborhood.map(hotel => {
-            return (
-              <HotelCard hotel={hotel} key={hotel.id} />
-            )
-          })
-        }
-      </div>
-    )
-  }
-
-  const hotels = props.hotels.map(hotel => {
+  if (filteredAndSortedHotels.length) {
+    hotels = filteredAndSortedHotels.map(hotel => {
       return (
         <HotelCard hotel={hotel} key={hotel.id} />
       )
@@ -227,7 +148,19 @@ const HotelList = props => {
         { hotels }
       </div>
     )
-
+  } else {
+    hotels = props.hotels.map(hotel => {
+      return (
+        <HotelCard hotel={hotel} key={hotel.id} />
+      )
+    });
+  
+    return (
+      <div className="hotel-list">
+        { hotels }
+      </div>
+    )
+  }
 }
 
 export default HotelList;
