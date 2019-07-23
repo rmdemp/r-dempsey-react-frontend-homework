@@ -63,7 +63,7 @@ const HotelFilter = props => {
             {
               Object.entries(neighborhoods).map(([key, value]) => {
                 return (
-                  <option value={key}>{key} ({value})</option>
+                  <option key={key[0]+key[2]+value} value={key}>{key} ({value})</option>
                 )
               })
             }
