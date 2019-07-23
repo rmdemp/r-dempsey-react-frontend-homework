@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 const HotelFilter = props => {
   const [sortPriceBy, setSortPriceBy] = useState('');
   const [filterBy, setFilterBy] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
   const inputRef = useRef(null);
   const selectRef = useRef(null);
   const neighborhoods = {};
@@ -10,6 +11,7 @@ const HotelFilter = props => {
   useEffect(() => {
     props.onPriceSortByChange(sortPriceBy);
     props.onNameFilterChange(filterBy);
+    props.onNeighborhoodChange(neighborhood);
   })
 
   const handlePriceSortChange = (e) => {
@@ -18,6 +20,10 @@ const HotelFilter = props => {
 
   const handleNameFilterChange = (e) => {
     setFilterBy(e.target.value);
+  }
+
+  const handleNeighborhoodChange = (e) => {
+    setNeighborhood(e.target.value);
   }
 
   const handleReset = () => {
@@ -50,7 +56,7 @@ const HotelFilter = props => {
             <option value="descending">Price high-to-low</option>
         </select>
         Neighborhood
-        <select className="select" onChange={(event) => console.log(event.target.value)}>
+        <select className="select" onChange={(event) => handleNeighborhoodChange(event)}>
             {
               Object.entries(neighborhoods).map(([key, value]) => {
                 return (
