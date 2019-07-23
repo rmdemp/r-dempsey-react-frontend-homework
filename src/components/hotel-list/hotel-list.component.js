@@ -3,6 +3,62 @@ import './hotel-list.style.scss';
 
 import HotelCard from '../hotel-card/hotel-card.component';
 
+// filter by name
+const filterByName = (arr, filterCriteria) => {
+  const searchTerm = new RegExp(filterCriteria, 'i');
+  let filteredArray = [];
+
+  arr.forEach(el => {
+    if (searchTerm.test(el.hotelStaticContent.name)) {
+      filteredArray.push(el);
+    }
+  })
+
+  return filteredArray;
+}
+
+// sort by price ascending
+const sortByPriceAscending = arr => {
+  return arr.sort((a, b) => {
+    return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount; 
+  })
+}
+
+// sort by price descending
+const sortByPriceDescending = arr => {
+  return arr.sort((a, b) => {
+    return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
+  })
+}
+
+// sort by recommended
+const sortByRecommended = arr => {
+  return arr.sort((a, b) => {
+    return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
+  })
+}
+
+// sort hotels by ascending, descending, or default to recommended
+const sortHotels = (arr, sortCriteria = null) => {
+  let sortedHotels = [];
+    
+  if (sortCriteria === 'ascending') {
+    sortedHotels = sortByPriceAscending(arr);
+  } else if (sortCriteria === 'descending') {
+    sortedHotels = sortByPriceDescending(arr);
+  } else {
+    sortedHotels = sortByRecommended(arr);
+  }
+
+  return sortedHotels;
+}
+
+// sort by neighborhood
+const sortByNeighborhood = (arr, neighborhood) => {
+  return arr.filter(el => { return el.hotelStaticContent.neighborhoodName === neighborhood });
+}
+
+// component definition
 const HotelList = props => {
   if (props.serverError) {
     return (
@@ -16,17 +72,10 @@ const HotelList = props => {
   }
 
   if (props.neighborhood) {
-    let hotelsByNeighborhood = props.hotels.filter(el => {return el.hotelStaticContent.neighborhoodName === props.neighborhood});
+    let hotelsByNeighborhood = sortByNeighborhood(props.hotels, props.neighborhood);
 
     if (props.filterBy) {
-      let searchTerm = new RegExp(props.filterBy, 'gi');
-      let filteredHotels = [];
-  
-      hotelsByNeighborhood.forEach(hotel => {
-        if (searchTerm.test(hotel.hotelStaticContent.name)) {
-          filteredHotels.push(hotel);
-        }
-      })
+      let filteredHotels = filterByName(hotelsByNeighborhood, props.filterBy);
   
       if (!filteredHotels.length) {
         return (
@@ -37,22 +86,8 @@ const HotelList = props => {
       }
   
       if (props.sortPriceBy) {
-        let sortedHotels = [];
+        let sortedHotels = sortHotels(filteredHotels, props.sortPriceBy);
     
-        if (props.sortPriceBy === 'ascending') {
-          sortedHotels = filteredHotels.sort((a, b) => {
-            return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
-          })
-        } else if (props.sortPriceBy === 'descending') {
-          sortedHotels = filteredHotels.sort((a, b) => {
-            return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
-          })
-        } else {
-          sortedHotels = filteredHotels.sort((a, b) => {
-            return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
-          });
-        }
-  
         return (
           <div className="hotel-list">
             {
@@ -80,22 +115,8 @@ const HotelList = props => {
     }
 
     if (props.sortPriceBy) {
-      let sortedHotels = [];
+      let sortedHotels = sortHotels(hotelsByNeighborhood, props.sortPriceBy);
   
-      if (props.sortPriceBy === 'ascending') {
-        sortedHotels = hotelsByNeighborhood.sort((a, b) => {
-          return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
-        })
-      } else if (props.sortPriceBy === 'descending') {
-        sortedHotels = hotelsByNeighborhood.sort((a, b) => {
-          return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
-        })
-      } else {
-        sortedHotels = hotelsByNeighborhood.sort((a, b) => {
-          return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
-        });
-      }
-
       return (
         <div className="hotel-list">
           {
@@ -123,14 +144,7 @@ const HotelList = props => {
   }
 
   if (props.filterBy) {
-    let searchTerm = new RegExp(props.filterBy, 'gi');
-    let filteredHotels = [];
-
-    props.hotels.forEach(hotel => {
-      if (searchTerm.test(hotel.hotelStaticContent.name)) {
-        filteredHotels.push(hotel);
-      }
-    })
+    let filteredHotels = filterByName(props.hotels, props.filterBy);
 
     if (!filteredHotels.length) {
       return (
@@ -141,22 +155,8 @@ const HotelList = props => {
     }
 
     if (props.sortPriceBy) {
-      let sortedHotels = [];
+      let sortedHotels = sortHotels(filteredHotels, props.sortPriceBy);
   
-      if (props.sortPriceBy === 'ascending') {
-        sortedHotels = filteredHotels.sort((a, b) => {
-          return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
-        })
-      } else if (props.sortPriceBy === 'descending') {
-        sortedHotels = filteredHotels.sort((a, b) => {
-          return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
-        })
-      } else {
-        sortedHotels = filteredHotels.sort((a, b) => {
-          return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
-        });
-      }
-
       return (
         <div className="hotel-list">
           {
@@ -184,21 +184,8 @@ const HotelList = props => {
   }
 
   if (props.sortPriceBy) {
-    let sortedHotels = [];
-
-    if (props.sortPriceBy === 'ascending') {
-      sortedHotels = props.hotels.sort((a, b) => {
-        return a.lowestAveragePrice.amount - b.lowestAveragePrice.amount;
-      })
-    } else if (props.sortPriceBy === 'descending') {
-      sortedHotels = props.hotels.sort((a, b) => {
-        return b.lowestAveragePrice.amount - a.lowestAveragePrice.amount;
-      })
-    } else {
-      sortedHotels = props.hotels.sort((a, b) => {
-        return b.hotelStaticContent.rating - a.hotelStaticContent.rating;
-      });
-    }
+    let hotels = props.hotels;
+    let sortedHotels = sortHotels(hotels, props.sortPriceBy);
 
     return (
       <div className="hotel-list">
@@ -214,7 +201,7 @@ const HotelList = props => {
   }
 
   if (props.neighborhood) {
-    let hotelsByNeighborhood = props.hotels.filter(el => {return el.hotelStaticContent.neighborhoodName === props.neighborhood});
+    let hotelsByNeighborhood = sortByNeighborhood(props.hotel, props.neighborhood);
   
     return (
       <div className="hotel-list">
