@@ -106,6 +106,22 @@ const HotelList = props => {
     )
   }
 
+  if (props.neighborhood) {
+    let hotelsByNeighborhood = props.hotels.filter(el => {return el.hotelStaticContent.neighborhoodName === props.neighborhood});
+
+    return (
+      <div className="hotel-list">
+        {
+          hotelsByNeighborhood.map(hotel => {
+            return (
+              <HotelCard hotel={hotel} key={hotel.id} />
+            )
+          })
+        }
+      </div>
+    )
+  }
+
   const hotels = props.hotels.map(hotel => {
       return (
         <HotelCard hotel={hotel} key={hotel.id} />
