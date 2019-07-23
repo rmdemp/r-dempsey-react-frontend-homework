@@ -5,7 +5,8 @@ const HotelFilter = props => {
   const [filterBy, setFilterBy] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const inputRef = useRef(null);
-  const selectRef = useRef(null);
+  const sortSelectRef = useRef(null);
+  const neighborhoodSelectRef = useRef(null);
   const neighborhoods = {};
 
   useEffect(() => {
@@ -28,9 +29,11 @@ const HotelFilter = props => {
 
   const handleReset = () => {
     inputRef.current.value = '';
-    selectRef.current.value = 'recommended';
+    sortSelectRef.current.value = null;
+    neighborhoodSelectRef.current.value = null;
     setFilterBy('');
-    setSortPriceBy('recommended');
+    setSortPriceBy('');
+    setNeighborhood('');
   }
 
   const neighborhoodNames = props.hotels.map(hotel => {
@@ -50,13 +53,13 @@ const HotelFilter = props => {
         Hotel name
         <input ref={inputRef} type="text" className="input" onChange={(event) => handleNameFilterChange(event)}/>
         Price
-        <select ref={selectRef} name="" className="select" onChange={(event) => handlePriceSortChange(event)}>
+        <select ref={sortSelectRef} name="" className="select" onChange={(event) => handlePriceSortChange(event)}>
             <option value="recommended">Recommended</option>
             <option value="ascending">Price low-to-high</option>
             <option value="descending">Price high-to-low</option>
         </select>
         Neighborhood
-        <select className="select" onChange={(event) => handleNeighborhoodChange(event)}>
+        <select ref={neighborhoodSelectRef} className="select" onChange={(event) => handleNeighborhoodChange(event)}>
             {
               Object.entries(neighborhoods).map(([key, value]) => {
                 return (
