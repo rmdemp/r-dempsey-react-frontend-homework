@@ -48,7 +48,7 @@ const sortHotelsByPrice = (arr, sortCriteria = null) => {
   return sortedHotels;
 }
 
-const sortByNeighborhood = (arr, neighborhood) => {
+const filterByNeighborhood = (arr, neighborhood) => {
   return arr.filter(el => { return el.hotelStaticContent.neighborhoodName === neighborhood });
 }
 
@@ -70,10 +70,10 @@ const HotelList = props => {
   if (props.sortPriceBy) {
     if (props.neighborhood) {
       if (props.filterBy) {
-        filteredAndSortedHotels = sortHotelsByPrice(filterByName(sortByNeighborhood(props.hotels, props.neighborhood), props.filterBy), props.sortPriceBy);
+        filteredAndSortedHotels = sortHotelsByPrice(filterByName(filterByNeighborhood(props.hotels, props.neighborhood), props.filterBy), props.sortPriceBy);
       }
       
-      filteredAndSortedHotels = sortHotelsByPrice(sortByNeighborhood(props.hotels, props.neighborhood), props.sortPriceBy);
+      filteredAndSortedHotels = sortHotelsByPrice(filterByNeighborhood(props.hotels, props.neighborhood), props.sortPriceBy);
     }
 
     if (props.filterBy) {
@@ -95,7 +95,7 @@ const HotelList = props => {
     }
 
     if (props.neighborhood) {
-      filteredAndSortedHotels = sortByNeighborhood(filteredHotels, props.neighborhood);
+      filteredAndSortedHotels = filterByNeighborhood(filteredHotels, props.neighborhood);
     }
 
     if (props.sortPriceBy) {
@@ -106,7 +106,7 @@ const HotelList = props => {
   }
 
   if (props.neighborhood) {
-    let hotelsByNeighborhood = sortByNeighborhood(props.hotels, props.neighborhood);
+    let hotelsByNeighborhood = filterByNeighborhood(props.hotels, props.neighborhood);
 
     if (props.filterBy) {
       let filteredHotels = filterByName(hotelsByNeighborhood, props.filterBy);
